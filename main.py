@@ -2,6 +2,7 @@ from PIL import Image
 import requests
 import os 
 import json
+import datetime
 
 def get_images(): 
     # do stuff to get images here
@@ -62,11 +63,13 @@ def count_pixels():
     print('dark purple:',dpurp)
     print('lime:',green)
     print('other:',other)
+    updatedAt = datetime.datetime.now()
     d = {
         'lightPurple': lpurp,
         'darkPurple': dpurp,
         'lime': green,
-        'other': other
+        'other': other,
+        'updatedAt': str(updatedAt.year) + '-' + str(updatedAt.month) + '-' + str(updatedAt.day) + ' '+ str(updatedAt.hour)+':' + str(updatedAt.minute)
     }
     with open('data.json', 'w') as file: 
         json.dump(d, file)
