@@ -12,9 +12,9 @@ def get_images():
     run = True
     while run:
         if (cursor == ''):
-            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=25&q=p4a2025&until='# + str(cursor)
+            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=100&q=p4a2025&until='# + str(cursor)
         else:
-            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=25&q=p4a2025&until=' + str(cursor)
+            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=100&q=p4a2025&until=' + str(cursor)
         response = requests.get(url)
         pos = -1
         if 'posts' not in response.json():
@@ -32,7 +32,7 @@ def get_images():
                 if pos == len(response.json()['posts']) -1:
                     cursor = x['record']['createdAt']
             print(cursor)
-            if len(response.json()['posts']) < 25:
+            if len(response.json()['posts']) < 100:
                 run = False
         # disable once ready to loop forever 👇🏻
         # run = False
