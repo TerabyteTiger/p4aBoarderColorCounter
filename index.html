@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P4A PFP Ring Analysis</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+  <h1 class="text-4xl text-center py-4">P4A Profile Picture Ring Data</h1>
+  <p class="text-center">Updated at <span id="updatedTime"></span></p>
+  <div class="my-8 max-w-9/10 md:max-w-3/5 mx-auto bg-gray-100 rounded-xl drop-shadow-sm">
+    <h2 class="underline py-2 text-xl text-center font-bold">Posters Bar Chart</h2>
+    <canvas id="barChart" class="mx-auto w-9/10 md:w-1/2"></canvas>
+  </div>
+  <div class="my-8 max-w-9/10 md:max-w-3/5 mx-auto bg-gray-100 rounded-xl drop-shadow-sm">
+    <h2 class="underline py-2 text-xl text-center font-bold">Posters Pie Chart</h2>
+    <canvas id="pieChart" class="mx-auto w-9/10 md:w-1/2"></canvas>
+  </div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  async function getData() {
+    const url = 'https://raw.githubusercontent.com/TerabyteTiger/p4aBoarderColorCounter/refs/heads/main/data.json'
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+      }
+      const json = await response.json();
+      console.log(json)
+      return json
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+  async function init() {
+
+    let data = await getData()
+    const bcConfig = {
+      type: 'bar',
+      data: {
+        labels: ["Light Purple", "Dark Purple", "Lime", "Other"],
+        datasets: [
+          {
+            label: "Unique Posters",
+            data: [data.lightPurple, data.darkPurple, data.lime, data.other],
+            backgroundColor: ['#E1DBFF', '#938AE3', '#D3FF6A', '#666']
+          }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    }
+    const pieConfig = {
+      type: 'pie',
+      data: {
+        labels: ["Light Purple", "Dark Purple", "Lime", "Other"],
+        datasets: [
+          {
+            label: "Unique Posters",
+            data: [data.lightPurple, data.darkPurple, data.lime, data.other],
+            backgroundColor: ['#E1DBFF', '#938AE3', '#D3FF6A', '#666']
+          }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    }
+
+    new Chart(document.getElementById('barChart'),
+      bcConfig)
+    new Chart(document.getElementById('pieChart'),
+      pieConfig)
+
+    document.getElementById('updatedTime').innerHTML = data.updatedAt + ' ET'
+
+  }
+
+  init()
+</script>
+
+</html>
