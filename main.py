@@ -12,9 +12,9 @@ def get_images():
     run = True
     while run:
         if (cursor == ''):
-            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=100&q=p4a2025&until='# + str(cursor)
+            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=99&q=p4a2025&until='# + str(cursor)
         else:
-            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=100&q=p4a2025&until=' + str(cursor)
+            url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?sort=latest&limit=99&q=p4a2025&until=' + str(cursor)
         response = requests.get(url)
         pos = -1
         if 'posts' not in response.json():
@@ -22,17 +22,18 @@ def get_images():
         else:
             for x in response.json()['posts']:
                 pos += 1
-                avatar = x['author']['avatar']
-                # this will also serve as the file name 👇🏻
-                handle = './avatars/'+x['author']['handle']+'.jpg'
-                image = requests.get(avatar).content
-                with open(handle, 'wb') as handler:
-                    handler.write(image)
+                if "avatar" in x['author']:
+                    avatar = x['author']['avatar']
+                    # this will also serve as the file name 👇🏻
+                    handle = './avatars/'+x['author']['handle']+'.jpg'
+                    image = requests.get(avatar).content
+                    with open(handle, 'wb') as handler:
+                        handler.write(image)
                 #last element
                 if pos == len(response.json()['posts']) -1:
                     cursor = x['record']['createdAt']
             print(cursor)
-            if len(response.json()['posts']) < 100:
+            if len(response.json()['posts']) < 99:
                 run = False
         # disable once ready to loop forever 👇🏻
         # run = False
