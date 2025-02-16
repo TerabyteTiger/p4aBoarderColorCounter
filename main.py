@@ -30,7 +30,7 @@ def get_images():
                     with open(handle, 'wb') as handler:
                         handler.write(image)
                 #last element
-                if pos == len(response.json()['posts']) -1:
+                if "Z" in x['record']['createdAt']:
                     cursor = x['record']['createdAt']
             print(cursor)
             if len(response.json()['posts']) < 99:
